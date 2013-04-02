@@ -26,7 +26,7 @@
 @synthesize controllerName = _controllerName;
 @synthesize sectionTemplate = _sectionTemplate;
 @synthesize emptyMessage = _emptyMessage;
-
+@synthesize onSearch = _onSearch;
 
 - (QRootElement *)init {
     self = [super init];

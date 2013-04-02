@@ -160,7 +160,7 @@
     QEntryElement *entryElement = [[QEntryElement alloc] initWithTitle:@"Entry Element" Value:nil Placeholder:@"type here"];
 	entryElement.key = @"entry1";
 
-    NSArray *values = [NSArray arrayWithObjects:@"Ferrari", @"Ms.",@"Mrs.",@"Miss",@"Mr.",@"Prof.",@"A/Prof.",nil];
+    NSArray *values = [NSArray arrayWithObjects:@"傻逼B", @"傻逼A",@"Mrs.",@"Miss",@"Mr.",@"Prof.",@"A/Prof.",nil];
     QAutoEntryElement *autoElement = [[QAutoEntryElement alloc] initWithTitle:@"AutoComplete" value:nil placeholder:@"type letter M"];
     autoElement.autoCompleteValues = values;
     autoElement.autoCompleteColor = [UIColor orangeColor];
@@ -525,6 +525,39 @@
     return root;
 }
 
++ (QRootElement *)createFilteringRoot {
+        
+    QRootElement *root = [[QRootElement alloc] init];
+    root.title = @"Filtering";
+    root.grouped = YES;
+        
+    QSection *filteringSection = [[QSection alloc] init];
+    filteringSection.key = @"filteringSection";
+        
+    NSArray *items = [NSArray arrayWithObjects:@"Football", @"Soccer", @"Formula 1", nil];
+        
+    QRadioElement *radioElement = [[QRadioElement alloc] initWithItems:items selected:0 title:@"Filtering"];
+        
+    radioElement.onSearch = ^(NSString* searchTerm) {
+        radioElement.selectedItem = nil;
+        if ([searchTerm isEqualToString:@""]) {
+            radioElement.items = items;
+        } else {
+            radioElement.items = [items filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self CONTAINS[cd] %@", searchTerm]];
+        }
+    };
+        
+    radioElement.onSelected = ^{
+        id selectedItem = radioElement.selectedItem;
+        radioElement.items = items;
+        radioElement.selectedItem = selectedItem;
+    };
+        
+    [filteringSection addElement:radioElement];
+    
+    [root addSection:filteringSection];
+    return root;
+}
 
 + (QRootElement *)createSortingRoot {
 
@@ -677,6 +710,7 @@
     [sectionElements addElement:[self createDynamicSectionRoot]];
 	[sectionElements addElement:[self createWithInitDefault]];
 	[sectionElements addElement:[self createWithInitAndKey]];
+    [sectionElements addElement:[self createFilteringRoot]];
 
     [root addSection:sectionSamples];
     [root addSection:sectionElements];
