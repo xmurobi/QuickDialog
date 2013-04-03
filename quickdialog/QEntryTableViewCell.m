@@ -79,9 +79,9 @@
 
     if (CGRectEqualToRect(CGRectZero, _entryElement.parentSection.entryPosition)) {
         for (QElement *el in _entryElement.parentSection.elements){
-            if ([el isKindOfClass:[QEntryElement class]]){
+            if ([el isKindOfClass:[QLabelElement class]]){
                 CGFloat fontSize = self.textLabel.font.pointSize == 0? 17 : self.textLabel.font.pointSize;
-                CGSize size = [((QEntryElement *)el).title sizeWithFont:[self.textLabel.font fontWithSize:fontSize] forWidth:CGFLOAT_MAX lineBreakMode:UILineBreakModeWordWrap] ;
+                CGSize size = [((QLabelElement *)el).title sizeWithFont:[self.textLabel.font fontWithSize:fontSize] forWidth:CGFLOAT_MAX lineBreakMode:UILineBreakModeWordWrap] ;
                 if (size.width>titleWidth)
                     titleWidth = size.width;
             }
@@ -140,7 +140,6 @@
     CGRect labelFrame = self.textLabel.frame;
     self.textLabel.frame = CGRectMake(labelFrame.origin.x, labelFrame.origin.y,
             _entryElement.parentSection.entryPosition.origin.x-20, labelFrame.size.height);
-    
 }
 
 - (void)prepareForReuse {
