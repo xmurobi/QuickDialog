@@ -79,9 +79,9 @@
 
     if (CGRectEqualToRect(CGRectZero, _entryElement.parentSection.entryPosition)) {
         for (QElement *el in _entryElement.parentSection.elements){
-            if ([el isKindOfClass:[QLabelElement class]]){
+            if ([el isKindOfClass:[QEntryElement class]]){
                 CGFloat fontSize = self.textLabel.font.pointSize == 0? 17 : self.textLabel.font.pointSize;
-                CGSize size = [((QLabelElement *)el).title sizeWithFont:[self.textLabel.font fontWithSize:fontSize] forWidth:CGFLOAT_MAX lineBreakMode:UILineBreakModeWordWrap] ;
+                CGSize size = [((QEntryElement *)el).title sizeWithFont:[self.textLabel.font fontWithSize:fontSize] forWidth:CGFLOAT_MAX lineBreakMode:UILineBreakModeWordWrap] ;
                 if (size.width>titleWidth)
                     titleWidth = size.width;
             }
@@ -136,10 +136,36 @@
 
 -(void)recalculateEntryFieldPosition {
     _entryElement.parentSection.entryPosition = CGRectZero;
-    _textField.frame = [self calculateFrameForEntryElement];
+    CGRect entryPosition = [self calculateFrameForEntryElement];
+    
     CGRect labelFrame = self.textLabel.frame;
+    CGFloat fontSize = self.textLabel.font.pointSize == 0? 17 : self.textLabel.font.pointSize;
+    CGSize size = [self.textLabel.text sizeWithFont:[self.textLabel.font fontWithSize:fontSize] 
+                                           forWidth:CGFLOAT_MAX 
+                                      lineBreakMode:UILineBreakModeWordWrap];
+    float posX = MAX(_entryElement.parentSection.entryPosition.origin.x,labelFrame.origin.x + size.width);
     self.textLabel.frame = CGRectMake(labelFrame.origin.x, labelFrame.origin.y,
-            _entryElement.parentSection.entryPosition.origin.x-20, labelFrame.size.height);
+            size.width, labelFrame.size.height);
+    
+    entryPosition.origin.x = posX;
+    entryPosition.size.width = self.frame.size.width - posX - 45;
+    _textField.frame = entryPosition;
+    
+//    NSLog(@"self.frame(%.2f,%.2f,%.2f,%.2f)",
+//          self.frame.origin.x,
+//          self.frame.origin.y,
+//          self.frame.size.width,
+//          self.frame.size.height);
+//    NSLog(@"title.frame(%.2f,%.2f,%.2f,%.2f)",
+//          labelFrame.origin.x,
+//          labelFrame.origin.y,
+//          labelFrame.size.width,
+//          labelFrame.size.height);
+//    NSLog(@"p.entryposition(%.2f,%.2f,%.2f,%.2f)",
+//          entryPosition.origin.x,
+//          entryPosition.origin.y,
+//          entryPosition.size.width,
+//          entryPosition.size.height);
 }
 
 - (void)prepareForReuse {
