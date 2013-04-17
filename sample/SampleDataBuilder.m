@@ -534,7 +534,7 @@
     QSection *filteringSection = [[QSection alloc] init];
     filteringSection.key = @"filteringSection";
         
-    NSArray *items = [NSArray arrayWithObjects:@"Football", @"Soccer", @"Formula 1", nil];
+    NSArray *items = [NSArray arrayWithObjects:@"Football", @"Soccer", @"Formula 1", @"Formula Formula FormulaFormulaFormula",nil];
         
     QRadioElement *radioElement = [[QRadioElement alloc] initWithItems:items selected:0 title:@"Filtering"];
         
