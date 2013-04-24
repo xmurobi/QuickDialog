@@ -22,7 +22,9 @@
 @private
     UIWebView *_webView;
     NSString *_url;
+    NSString *_innerTitle;
 }
 
-- (QWebViewController *)initWithUrl:(NSString *)string;
+- (QWebViewController *)initWithUrl:(NSString *)string title:(NSString*)title;
+
 @end

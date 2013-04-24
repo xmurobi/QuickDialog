@@ -27,7 +27,8 @@
     BOOL _firstPageFinished;
     BOOL _previousToolbarState;
 }
-- (QWebViewController *)initWithUrl:(NSString *)url {
+
+- (QWebViewController *)initWithUrl:(NSString *)url title:(NSString*)title {
 
     self = [super init];
     if (self!=nil){
@@ -35,6 +36,7 @@
         _webView.delegate = self;
         _webView.scalesPageToFit = YES;
         _url = url;
+        _innerTitle = title;
         self.view = _webView;
         
         UIImage *backImage = [[UIImage alloc] initWithCGImage:[self createBackArrowImageRef]];
@@ -79,9 +81,13 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_url]]];
     _previousToolbarState = self.navigationController.toolbarHidden;
+    if (!_previousToolbarState)
+        [self.navigationController setToolbarHidden:NO animated:YES];
+    
+    [super viewWillAppear:animated];
+    
+    [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_url]]];
     self.navigationController.toolbarHidden = NO;
     self.navigationController.toolbar.tintColor = self.navigationController.navigationBar.tintColor;
 
@@ -109,7 +115,7 @@
     UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     [indicator startAnimating];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:indicator];
-    self.title = @"Loading";
+    self.title = NSLocalizedString(@"Loading",@"title");
     if (_firstPageFinished==YES){
         _btBack.enabled = YES;
     }
@@ -117,7 +123,10 @@
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
     self.navigationItem.rightBarButtonItem = nil;
-    self.title = [_webView stringByEvaluatingJavaScriptFromString:@"document.title"];
+    if ([_innerTitle length] == 0)
+        self.title = [_webView stringByEvaluatingJavaScriptFromString:@"document.title"];
+    else
+        self.title = _innerTitle;
     _firstPageFinished = YES;
 }
 
@@ -125,7 +134,7 @@
     if (error.code==-999)
         return;
     self.navigationItem.rightBarButtonItem = nil;
-    self.title = @"Error";
+    self.title = NSLocalizedString(@"Error",@"title");
     [_webView loadHTMLString:[NSString stringWithFormat:@"<html style='margin:2em'><font size=+5>%@</font></html>", [error localizedDescription]] baseURL:nil];
 }
 

@@ -30,7 +30,7 @@
 - (void)selected:(QuickDialogTableView *)tableView controller:(QuickDialogController *)controller indexPath:(NSIndexPath *)path {
     [self handleElementSelected:controller];
     if ([_url hasPrefix:@"http"]) {
-        QWebViewController *webController = [[QWebViewController alloc] initWithUrl:_url];
+        QWebViewController *webController = [[QWebViewController alloc] initWithUrl:_url title:_title];
         [controller displayViewController:webController];
     } else {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:_url]];
