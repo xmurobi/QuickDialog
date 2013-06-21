@@ -45,10 +45,14 @@
     return self;
 }
 
+- (QTableViewCell *)createDefaultCell {
+    return [[QTableViewCell alloc] initWithReuseIdentifier:[NSString stringWithFormat:@"QuickformElementCell%@", self.key]];
+}
+
 - (UITableViewCell *)getCellForTableView:(QuickDialogTableView *)tableView controller:(QuickDialogController *)controller {
     QTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[NSString stringWithFormat:@"QuickformElementCell%@", self.key]];
     if (cell == nil){
-        cell = [[QTableViewCell alloc] initWithReuseIdentifier:[NSString stringWithFormat:@"QuickformElementCell%@", self.key]];
+        cell = [self createDefaultCell];
     }
 
     cell.textLabel.text = nil; 

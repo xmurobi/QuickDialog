@@ -46,6 +46,8 @@
 
 - (QElement *)initWithKey:(NSString *)key;
 
+- (QTableViewCell *)createDefaultCell;
+
 - (UITableViewCell *)getCellForTableView:(QuickDialogTableView *)tableView controller:(QuickDialogController *)controller;
 
 - (void)handleElementSelected:(QuickDialogController *)controller;
